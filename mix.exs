@@ -5,7 +5,7 @@ defmodule Pokestats.MixProject do
     [
       app: :pokestats,
       version: "0.1.0",
-      elixir: "~> 1.7",
+      elixir: "~> 1.11.3",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
@@ -45,8 +45,16 @@ defmodule Pokestats.MixProject do
       {:telemetry_metrics, "~> 0.4"},
       {:telemetry_poller, "~> 0.4"},
       {:gettext, "~> 0.11"},
-      {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.0"}
+      {:plug_cowboy, "~> 2.0"},
+
+      # HTTP Client
+      {:tesla, "~> 1.4.0"},
+
+      # optional, but recommended adapter
+      {:hackney, "~> 1.17.0"},
+
+      # optional, required by JSON middleware
+      {:jason, "~> 1.0"}
     ]
   end
 
