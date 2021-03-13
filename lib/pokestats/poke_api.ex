@@ -18,7 +18,7 @@ defmodule Pokestats.PokeApi do
   request and accumulate all the pokemons
   on teh `acc_list`.
 
-  Returns {:ok, [list_of_pokemons]}
+  Returns {:ok, [pokemons_list]}
 
   ## Examples
 
@@ -32,7 +32,7 @@ defmodule Pokestats.PokeApi do
          acc_list =
            acc_list ++
              results do
-      if is_nil(next), do: acc_list, else: list_pokemons(next, acc_list)
+      if is_nil(next), do: {:ok, acc_list}, else: list_pokemons(next, acc_list)
     end
   end
 
@@ -63,7 +63,7 @@ defmodule Pokestats.PokeApi do
        %{
          name: body["name"],
          image: body["sprites"]["other"]["official-artwork"]["front_default"],
-         measurememts: %{
+         measurements: %{
            height: body["height"],
            weight: body["weight"]
          },
