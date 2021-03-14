@@ -47,6 +47,11 @@ defmodule Pokestats.Pokemon do
   the given `params`.
 
   Returns {:ok %Pokemon{}}
+
+  ## Examples
+
+    iex > Pokestats.Pokemon.create_pokemon(valid_params)
+    {:ok, %Pokestats.Pokemon{}}
   """
   @doc since: "0.1.3"
   def create_pokemon(params) do
@@ -58,11 +63,20 @@ defmodule Pokestats.Pokemon do
   @doc """
   List all pokemons of our database.
 
-  Returns {:ok, [%Pokemon{}]}
+  Returns [%Pokemon{}]
+  Returns []
+
+  ## Examples
+
+    iex > Pokestats.Pokemon.list_pokemons()
+    [%Pokestats.Pokemon{}]
+
+    iex > Pokestats.Pokemon.list_pokemons()
+    []
   """
   @doc since: "0.1.3"
   def list_pokemons() do
-    %Pokemon{}
+    Pokemon
     |> Repo.all()
   end
 end
