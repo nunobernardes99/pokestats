@@ -8,7 +8,7 @@ use Mix.Config
 config :pokestats, Pokestats.Repo,
   username: "postgres",
   password: "postgres",
-  database: "pokestats_test#{System.get_env("MIX_TEST_PARTITION")}",
+  database: "pokestats_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
 
