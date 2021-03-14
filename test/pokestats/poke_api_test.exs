@@ -3,6 +3,7 @@ defmodule Pokestats.PokeApiTest do
 
   doctest Pokestats.PokeApi
 
+  @tag :skip
   test "list_pokemons/2" do
     assert {:ok, pokemons_list} = Pokestats.PokeApi.list_pokemons()
 
