@@ -7,8 +7,10 @@ defmodule Pokestats.PokeApiTest do
     assert {:ok, pokemons_list} = Pokestats.PokeApi.list_pokemons()
 
     first_pokemon = List.first(pokemons_list)
-    assert "bulbasaur" == first_pokemon["name"]
-    assert "https://pokeapi.co/api/v2/pokemon/1/" == first_pokemon["url"]
+    assert "bulbasaur" == first_pokemon.name
+    assert 2 == length(first_pokemon.type)
+    assert 7 == first_pokemon.measurements.height
+    assert 69 == first_pokemon.measurements.weight
   end
 
   test "get_pokemon/1 by name" do

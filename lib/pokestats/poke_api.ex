@@ -23,15 +23,24 @@ defmodule Pokestats.PokeApi do
   ## Examples
 
     iex > Pokestats.PokeApi.list_pokemons()
-    {:ok, [%{"name" => "bulbasaur", "url" => "https://pokeapi[...]1/"}, ...]}
+    {:ok, [%{name: "bulbasaur", image: "...", name: "..."}, ...]}
   """
   @doc since: "0.1.0"
   def list_pokemons(next_page \\ nil, acc_list \\ []) do
-    with {:ok, %Tesla.Env{body: %{"next" => next, "results" => results}, status: 200}} <-
-           PokeApi.get(next_page || "/pokemon?limit=1000"),
-         acc_list =
-           acc_list ++
-             results do
+    with {:ok, %Tesla.Env{body: %{"next" => next, "results" => pokemon_list}, status: 200}} <-
+           PokeApi.get(next_page || "/pokemon?limit=1000") do
+      formatted_pokemon_list =
+        pokemon_list
+        |> Enum.map(fn pokemon ->
+          case get_pokemon(pokemon["name"]) do
+            {:ok, pokemon} -> pokemon
+            {:error, _} -> nil
+          end
+        end)
+        |> Enum.reject(&is_nil/1)
+
+      acc_list = acc_list ++ formatted_pokemon_list
+
       if is_nil(next), do: {:ok, acc_list}, else: list_pokemons(next, acc_list)
     end
   end
