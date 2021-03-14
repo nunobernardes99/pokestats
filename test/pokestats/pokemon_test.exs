@@ -77,4 +77,17 @@ defmodule Pokestats.PokemonTest do
     assert [name: {"can't be blank", [validation: :required]}] == changeset.errors
     assert false == changeset.valid?
   end
+
+  test "list_pokemons/0 with no values on the database" do
+    assert [] == Pokestats.Pokemon.list_pokemons()
+  end
+
+  test "list_pokemons/0 with values on the database", %{valid_params: valid_params} do
+    # Create 5 pokemons
+    1..5
+    |> Enum.each(fn _number -> Pokestats.Pokemon.create_pokemon(valid_params) end)
+
+    assert pokemons_list = Pokestats.Pokemon.list_pokemons()
+    assert 5 == length(pokemons_list)
+  end
 end
