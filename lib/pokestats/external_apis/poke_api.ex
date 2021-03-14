@@ -29,17 +29,15 @@ defmodule Pokestats.PokeApi do
   def list_pokemons(next_page \\ nil, acc_list \\ []) do
     with {:ok, %Tesla.Env{body: %{"next" => next, "results" => pokemon_list}, status: 200}} <-
            PokeApi.get(next_page || "/pokemon?limit=1000") do
-      formatted_pokemon_list =
-        pokemon_list
-        |> Enum.map(fn pokemon ->
-          case get_pokemon(pokemon["name"]) do
-            {:ok, pokemon} -> pokemon
-            {:error, _} -> nil
-          end
-        end)
-        |> Enum.reject(&is_nil/1)
-
-      acc_list = acc_list ++ formatted_pokemon_list
+      acc_list =
+        (pokemon_list
+         |> Enum.map(fn pokemon ->
+           case get_pokemon(pokemon["name"]) do
+             {:ok, pokemon} -> pokemon
+             {:error, _} -> nil
+           end
+         end)
+         |> Enum.reject(&is_nil/1)) ++ acc_list
 
       if is_nil(next), do: {:ok, acc_list}, else: list_pokemons(next, acc_list)
     end
@@ -70,17 +68,17 @@ defmodule Pokestats.PokeApi do
     with {:ok, %Tesla.Env{body: body, status: 200}} <- PokeApi.get("/pokemon/#{name_or_id}") do
       {:ok,
        %{
+         pokeapi_id: body["id"],
          name: body["name"],
          image: body["sprites"]["other"]["official-artwork"]["front_default"],
-         measurements: %{
-           height: body["height"],
-           weight: body["weight"]
-         },
+         height: body["height"],
+         weight: body["weight"],
          abilities: Enum.map(body["abilities"], & &1["ability"]["name"]),
          type: Enum.map(body["types"], & &1["type"]["name"])
        }}
     else
       {:ok, %Tesla.Env{body: body, status: status}} -> {:error, %{status: status, message: body}}
+      {:error, :timeout} -> {:error, :timetout}
     end
   end
 end
