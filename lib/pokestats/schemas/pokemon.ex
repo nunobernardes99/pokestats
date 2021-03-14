@@ -27,6 +27,13 @@ defmodule Pokestats.Pokemon do
   @doc """
   Validate `params` after manipulating struct
   onto the database.
+
+  Returns #Ecto.Changeset<>
+
+  ## Examples
+
+    iex > Pokestats.Pokemon.changeset(%Pokestats.Pokemon{}, valid_params)
+    #Ecto.Changeset<>
   """
   @doc since: "0.1.3"
   def changeset(pokemon, params \\ %{}) do
